@@ -1,28 +1,19 @@
-import authenticationUtil from "./authentication";
-import md5 from "md5";
-
 const userUtil = {
-    calculateEmailHash,
-    getUser,
-    getUserId,
+    storeUserData,
+    clearUserData,
+    getUserData,
 }
 
-function calculateEmailHash(email) {
-    email = email.toLowerCase();
-    email = email.trim();
-
-    const hash = md5(email);
-    return hash
-} 
-
-function getUser() {
-    const authToken = authenticationUtil.getAuthToken();
-    return authToken?.user
+function storeUserData(data) {
+    localStorage.setItem("user", JSON.stringify(data));
 }
 
-function getUserId() {
-    const authToken = authenticationUtil.getAuthToken();
-    return authToken?.user?.id
+function clearUserData() {
+    localStorage.removeItem("user");
+}
+
+function getUserData() {
+    return JSON.parse(localStorage.getItem("user"));
 }
 
 export default userUtil;

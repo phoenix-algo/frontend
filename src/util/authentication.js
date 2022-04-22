@@ -1,6 +1,5 @@
 import Cookies from "js-cookie";
-import base64 from "base-64";
-import userAPI from "api/user";
+import userUtil from "./user";
 
 const authenticationUtil = {
     getAuthToken,
@@ -11,11 +10,7 @@ const authenticationUtil = {
 
 function getAuthToken() {
     const data = Cookies.get("auth-token");
-
-    if (data == undefined)
-        return null;
-
-    return data
+    return data == undefined ? null : data;
 }
 
 function isUserLoggedIn() {
@@ -24,20 +19,19 @@ function isUserLoggedIn() {
 }
 
 function isUserAdmin() {
-    let user = userAPI.get
     if (!isUserLoggedIn())
-        return false;
+        return false; 
 
-    const authToken = getAuthToken();
-    return authToken?.user?.isAdmin == true;
+    let user = userUtil.getUserData();
+    return user?.IsAdmin === true;
 }
 
 function isUserProposer() {
     if (!isUserLoggedIn())
         return false;
 
-    const authToken = getAuthToken();
-    return (authToken?.user?.isAdmin === true || authToken?.user?.isProposer === true);
+    let user = userUtil.getUserData();
+    return user?.IsAdmin === true || user?.IsProposer === true;
 }
 
 export default authenticationUtil;

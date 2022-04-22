@@ -15,7 +15,7 @@ import TextField from '@material-ui/core/TextField';
 import authenticationAPI from "api/authentication";
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
-import userAPI from "api/user";
+import userUtil from "util/user";
 
 const useStyles = makeStyles(styles);
 
@@ -70,7 +70,7 @@ export default function LoginDialog(props) {
         onSubmit: async (values) => {
           try {
             const res = await authenticationAPI.login(values.username, values.password);
-            userAPI.storeUserData(res);
+            userUtil.storeUserData(res);
             window.location.reload();
           } catch(err) {
             console.error(err);

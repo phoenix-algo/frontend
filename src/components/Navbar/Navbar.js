@@ -25,8 +25,8 @@ export default function Navbar({color, fixed}) {
                 fixed={fixed ? fixed : true}
                 color={color ? color : "transparent"}
                 changeColorOnScroll={{
-                    height: 200,
-                    color: "white",
+                    height: 250,
+                    color: "info",
                 }}
             />
             <LoginDialog show={showLogin} onLogin = {toggleLogin}/>

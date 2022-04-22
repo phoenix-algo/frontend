@@ -13,7 +13,6 @@ import authenticationAPI from "api/authentication";
 import authenticationUtil from "util/authentication";
 import userUtil from "util/user";
 import { Divider } from "@material-ui/core";
-import userAPI from "api/user";
 
 const useStyles = makeStyles(styles);
 
@@ -23,7 +22,7 @@ export default function HeaderLinks(props) {
 
   const handleLogout = async() => {
     await authenticationAPI.logout();
-    userAPI.clearUserData();
+    userUtil.clearUserData();
     window.location.reload();
   }
 
@@ -77,11 +76,11 @@ export default function HeaderLinks(props) {
     links.push(
       <Divider/>,
       <ListItem className={classes.listItem}>
-        <Button className={classes.dropdownLink} style={{ paddingLeft: "8px", paddingRight: "8px"}} color="#757575" onClick={() => handleLogout()}>
-          <i style={{ fontSize: "18px", marginRight: "4px" }} className="fa fa-sign-out"></i>
-          Log out
-        </Button>
-      </ListItem>
+          <Button className={classes.dropdownLink} style={{ paddingLeft: "8px", paddingRight: "8px"}} color="transparent" onClick={() => handleLogout()}>
+          <i style={{ fontSize: "18px", marginRight: "4px" }} className="fa fa-shield" aria-hidden="true"></i>
+            Log out
+          </Button>
+        </ListItem>,
     );
 
     return links;
@@ -89,13 +88,13 @@ export default function HeaderLinks(props) {
 
   return (
     <List className={classes.list}>
-      <ListItem className={classes.listItem}>
-        <Link to="/problems" className={classes.navLink}>
+      <ListItem className={classes.listItem} color="transparent">
+        <Link to="/problems" className={classes.navLink} color="transparent">
           Problems
         </Link>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Link to="/submissions" className={classes.navLink}>
+        <Link to="/submissions" className={classes.navLink} color="transparent">
           Submissions
         </Link>
       </ListItem>
@@ -144,7 +143,7 @@ export default function HeaderLinks(props) {
         <ListItem className={classes.listItem}>
         <CustomDropdown
           noLiPadding
-          buttonText={authToken && authToken?.user?.username != null ? authToken?.user?.username : "User"}
+          buttonText={authToken && userUtil.getUserData()?.Username != null ? userUtil.getUserData().Username : "User"}
           buttonProps={{
             className: classes.navLink,
             color: "transparent",

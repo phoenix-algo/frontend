@@ -16,6 +16,7 @@ import authenticationAPI from "api/authentication";
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import userAPI from "api/user";
+import userUtil from "util/user";
 
 const useStyles = makeStyles(styles);
 
@@ -87,7 +88,7 @@ export default function SignupDialog(props) {
         onSubmit: async (values) => {
           try {
             const res = await authenticationAPI.signup(values.username, values.password,  values.email);
-            userAPI.storeUserData(res);
+            userUtil.storeUserData(res);
             window.location.reload()
           } catch(err) {
             let message = err.response.data;

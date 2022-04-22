@@ -33,7 +33,7 @@ export default function Footer(props) {
         <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://github.com/marius004/phoenix" 
+              <a href="https://github.com/marius004/phoenix-restructured" 
                 className={classes.block}
                 target="_blank">
                 <GitHubIcon style={{ fontSize: 16, transform: "translate(0, 2px)" }} /> {"  "}
