@@ -108,7 +108,7 @@ export default function LoginDialog(props) {
           >
             <Close className={classes.modalClose} />
           </IconButton>
-          <h3 className={classes.modalTitle} style={{textAlign: "center", fontWeight: "bold"}}>Autentificare</h3>
+          <h3 className={classes.modalTitle} style={{textAlign: "center", fontWeight: "bold"}}>Login</h3>
         </DialogTitle>
         <DialogContent style={{marginBottom: "0", paddingBottom: "0"}} 
           id="classic-modal-slide-description"

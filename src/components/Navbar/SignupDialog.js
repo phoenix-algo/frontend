@@ -125,7 +125,7 @@ export default function SignupDialog(props) {
           >
             <Close className={classes.modalClose} />
           </IconButton>
-          <h3 className={classes.modalTitle} style={{textAlign: "center", fontWeight: "bold"}}>Creare cont</h3>
+          <h3 className={classes.modalTitle} style={{textAlign: "center", fontWeight: "bold"}}>Register</h3>
         </DialogTitle>
         <DialogContent style={{marginBottom: "0", paddingBottom: "0"}} 
           id="classic-modal-slide-description"

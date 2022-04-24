@@ -24,8 +24,8 @@ ReactDOM.render(
   <Router history={hist}>
     <Switch>
       <Route exact path="/" component={HomePage} />
-      <Route exact path="/problems/:problemName" component={ProblemPage} />
-      <Route exact path="/problems/:problemName/edit" component={RequireProposer(Unauthorized, EditProblemPage)} />
+      <Route exact path="/problems/:problemId" component={ProblemPage} />
+      <Route exact path="/problems/:problemId/edit" component={RequireProposer(Unauthorized, EditProblemPage)} />
       <Route exact path="/problems" component={ProblemsPage}/>
       <Route path="/profile/:username" component={ProfilePage} />
       <Route path="/submissions/:submissionId" component={SubmissionPage} />

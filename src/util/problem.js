@@ -1,4 +1,5 @@
 import authenticationUtil from "./authentication";
+import userUtil from "./user";
 
 const problemUtil = {
   canUserEditProblem,
@@ -11,8 +12,8 @@ function canUserEditProblem(problem) {
     if(!problem) 
         return false;
     
-    const user = authenticationUtil.getAuthToken()?.user;
-    return user.isAdmin || (user?.id !== null && problem?.authorId === user?.id);
+    const user = userUtil.getUserData();
+    return user != null && (user?.IsAdmin === true || (user?.ID !== null && user?.ID === problem?.AuthorId)); 
 }
 
 export default problemUtil;

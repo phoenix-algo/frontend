@@ -41,7 +41,8 @@ const ProblemPage = () => {
     const [loading, setLoading] = useState(true);
     const [submissionId, setSubmissionId] = useState(-1);
     const [fetchingStatus, setFetchingStatus] = useState(200);
-    const { problemName } = useParams();
+    
+    const { problemId } = useParams();
     const [problem, setProblem] = useState({})
 
     const [code, setCode] = useState(`#include <stdio.h>\n\nint main() {\n  int a, b;\n\n  scanf("%d %d", &a, &b);\n  printf("%d", a + b);\n\n  return 0;\n}`);
@@ -59,7 +60,7 @@ const ProblemPage = () => {
 
     const fetchProblem = async() => {
         try {
-            const res = await problemAPI.getByName(problemName);
+            const res = await problemAPI.getById(problemId);
             setProblem(res);
         } catch (err) {
             console.error(err);
@@ -95,15 +96,16 @@ const ProblemPage = () => {
                 return;
 
             const submission = await submissionAPI.getById(submissionId);
+            console.log(submission);
 
-            if (submission.status === "finished") {
+            if (submission.Status === "evaluated") {
 
-                if (submission.score === 100) {
-                    toast.success(<p>Submission #{submissionId} evaluated <br/> Score: {submission.score}</p>, toastConfig);
+                if (submission.Score === 100) {
+                    toast.success(<p>Submission #{submissionId} evaluated <br/> Score: {submission.Score}</p>, toastConfig);
                 } else if(submission.score >= 50) {
-                    toast.warning(<p>Submission #{submissionId} evaluated <br/> Score: {submission.score}</p>, toastConfig);
+                    toast.warning(<p>Submission #{submissionId} evaluated <br/> Score: {submission.Score}</p>, toastConfig);
                 } else {
-                    toast.error(<p>Submission #{submissionId} evaluated <br/> Score: {submission.score}</p>, toastConfig);
+                    toast.error(<p>Submission #{submissionId} evaluated <br/> Score: {submission.Score}</p>, toastConfig);
                 }
 
                 clearInterval(timer);
@@ -115,12 +117,19 @@ const ProblemPage = () => {
         return () => {
             clearInterval(timer);
         }
-    }, [submissionId])
-       
+    }, [submissionId]);
+
+    const stringToByteArray = (str) => {
+        var bytes = new Uint8Array(str.length);
+        for (var i = 0; i < str.length; i++)
+            bytes[i] = str.charCodeAt(i);
+        return Array.from(bytes);
+    }
+
     const handleCodeSubmission = async() => {
         try {
-            const res = await submissionAPI.create(code, lang, problem.id);
-            setSubmissionId(res.id);
+            const res = await submissionAPI.create(stringToByteArray(code), lang, problem.ID);
+            setSubmissionId(res.ID);
             
             toast.info("Submission Sent", {
                 fontSize: 30,
@@ -138,7 +147,7 @@ const ProblemPage = () => {
     }
 
     const editProblemLink = () => {
-        return `/problems/${problem.name}/edit`;
+        return `/problems/${problem.ID}/edit`;
     }
 
     useEffect(fetchProblem, []);
@@ -182,14 +191,14 @@ const ProblemPage = () => {
                                 <div style={{border: "1px solid #bdbdbd", padding: "12px"}}>
                                     {problemUtil.canUserEditProblem(problem) &&
                                         <h3>
-                                            Problema {problem.name} {"  "}
+                                            Problem {problem.Name} {"  "}
                                             <a style={{color: "blue"}} href={editProblemLink()}>[EDIT]</a>
                                         </h3>
                                     }
                                     {!problemUtil.canUserEditProblem(problem) &&
-                                        <h3>Problema {problem.name}</h3>
+                                        <h3>Problem {problem.Name}</h3>
                                     }
-                                    <MDEditor.Markdown style={{marginBottom: "12px"}} source={problem.description} />
+                                    <MDEditor.Markdown style={{marginBottom: "12px"}} source={problem.Description} />
                                 </div>
                             )
                         },

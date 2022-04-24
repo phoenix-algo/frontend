@@ -10,7 +10,7 @@ import {Link} from "react-router-dom";
 const Problem = ({problem}) => {
 
     const problemLink = () => {
-        return `/problems/${problem.name}`
+        return `/problems/${problem.ID}`
     }
 
     return(
@@ -23,11 +23,11 @@ const Problem = ({problem}) => {
                 }}
                 tabs={[
                     {
-                        tabButton: problem.visible ? problem.name : problem.name + " (unpublished) " ,
+                        tabButton: problem.Visible ? problem.Name : problem.Name + " (unpublished) " ,
                         tabIcon: Dashboard,
                         tabContent: (
                             <div style={{maxHeight: "240px", overflow: "auto", padding: "6px"}}>
-                                <MDEditor.Markdown style={{marginBottom: "20px"}} source={problem.shortDescription}/>
+                                <MDEditor.Markdown style={{marginBottom: "20px"}} source={problem.Description}/>
                                 <Link to={problemLink()}>
                                     <Button variant="contained" color="primary">
                                         Solve

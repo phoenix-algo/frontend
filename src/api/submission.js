@@ -24,16 +24,22 @@ function getById(id) {
         .then(res => res.data)
 }
 
-function getByUserAndProblem(userId, problem) {
-    return axios.get(`${config.apiUrl}/submissions?userId=${userId}&problem=${problem}`, config.cors)
+// OK 
+function getByUserAndProblem(user, problem) {
+    return axios.get(`${config.apiUrl}/submissions?userId=${user.ID}&problemId=${problem.ID}`, config.cors)
         .then(res => res.data);
 }
 
-function create(code, language, problemId) {
+function create(sourceCode, language, problemId) {
+    console.log({
+        language: language,
+        problemId: problemId,
+        sourceCode: sourceCode,   
+    })
     return axios.post(`${config.apiUrl}/submissions`, {
-        lang: language,
-        sourceCode: code,
-        problemId: problemId
+        language: language,
+        problemId: problemId,
+        sourceCode: sourceCode,
     }, config.cors)
         .then(res => res.data)
 }

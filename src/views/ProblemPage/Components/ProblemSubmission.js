@@ -12,7 +12,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import authenticationUtil from "util/authentication";
-import userUtil from "util/user";
 import submissionAPI from "api/submission";
 
 const useStyles = makeStyles({
@@ -28,17 +27,15 @@ const useStyles = makeStyles({
 });
 
 const ProblemSubmissions = ({ problem }) => {
-    
     const [submissions, setSubmissions] = useState([])
     const classes = useStyles();
 
     const fetchSubmissions = async() => {
         if (!authenticationUtil.isUserLoggedIn()) return;
-
-        const userId = userUtil.getUserId();
+        const user = await authenticationUtil.getLoggedUser();
 
         try {
-            const submissions = await submissionAPI.getByUserAndProblem(userId, problem.name);  
+            const submissions = await submissionAPI.getByUserAndProblem(user.ID, problem.ID);  
             setSubmissions(submissions);
         } catch(err) {
             console.error(err);
@@ -64,46 +61,46 @@ const ProblemSubmissions = ({ problem }) => {
     }
 
     const submissionStatus = (submission) => {
-        if (submission.status == "waiting")
+        if (submission.Status == "waiting")
             return "Waiting";
-        if(submission.status == "working")
+        if(submission.Status == "evaluating")
             return "Evaluating";
-        if (submission.hasCompileError)
+        if (submission.CompiledSuccesfully === false)
             return "Compilation Error";
-        if (submission.score === 100)
+        if (submission.Score === 100)
             return "Accepted";
         return "Not accepted";
     }
 
-    // COLORS TAKEN FROM: https://materializecss.com/color.html
+    // https://materializecss.com/color.html
     const submissionRowColor = (submission) => {
-        if(submission.status == "working")
+        if(submission.Status == "working")
             return {backgroundColor: "#64b5f6"}
 
-        if (submission.status == "waiting")
+        if (submission.Status == "waiting")
             return {backgroundColor: "#dce775"}
 
-        if (submission.score == 0)
+        if (submission.Score == 0)
             return {backgroundColor: "#b71c1c"}; // red darken-4
-        if (submission.score <= 30)
+        if (submission.Score <= 30)
             return {backgroundColor: "#d32f2f"}; // red darken-3
-        if (submission.score < 50)
+        if (submission.Score < 50)
             return {backgroundColor: "#ef5350"}; // red lighten-1
         
-        if (submission.score <= 60)
+        if (submission.Score <= 60)
             return {backgroundColor: "#ff9800"}; // orange
-        if (submission.score <= 80)
+        if (submission.Score <= 80)
             return {backgroundColor: "#ffa726"}; // orange lighten-2
-        if (submission.score < 100)
+        if (submission.Score < 100)
             return {backgroundColor: "#ffb74d"}; // orange lighten-4
         
         return {backgroundColor: "#388e3c"}; // green darken-2
     }
 
     const submissionScore = (submission) => {
-        if(submission.status == "working" || submission.status == "waiting")
+        if(submission.Status == "evaluating" || submission.Status == "waiting")
             return "N/A";
-        return submission.score;
+        return submission.Score;
     }
 
     return (
@@ -112,7 +109,7 @@ const ProblemSubmissions = ({ problem }) => {
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Id</TableCell>
+                            <TableCell>ID</TableCell>
                             <TableCell>Time Submitted</TableCell>
                             <TableCell>Status</TableCell>
                             <TableCell align="right">Score</TableCell>
@@ -120,14 +117,14 @@ const ProblemSubmissions = ({ problem }) => {
                     </TableHead>
                     <TableBody>
                     {submissions.map((row) => (
-                        <TableRow key={row.id} style={submissionRowColor(row)}>
+                        <TableRow key={row.ID} style={submissionRowColor(row)}>
                             <TableCell component="th" scope="row">
-                                <Link to={`/submissions/${row.id}`} 
+                                <Link to={`/submissions/${row.ID}`} 
                                     style={{color: "black", textDecoration: "underline"}}>
-                                    {row.id}
+                                    {row.ID}
                                 </Link> 
                             </TableCell>
-                            <TableCell>{row.createdAt}</TableCell>
+                            <TableCell>{row.CreatedAt}</TableCell>
                             <TableCell>{submissionStatus(row)}</TableCell>
                             <TableCell align="right">{submissionScore(row)}</TableCell>
                         </TableRow>

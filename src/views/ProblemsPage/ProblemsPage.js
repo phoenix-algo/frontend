@@ -13,13 +13,11 @@ import problemAPI from "api/problem";
 const useStyles = makeStyles(styles);
 
 const ProblemsPage = () => {
-
     const [loading, setLoading] = useState(true);
     const [fetchingStatus, setFetchingStatus] = useState(200);
+    const [problems, setProblems] = useState([]);
 
     const classes = useStyles();
-    const [problems, setProblems] = React.useState([]);
-    const query = useQuery();
 
     const fetchProblems = async () => {
         try {
