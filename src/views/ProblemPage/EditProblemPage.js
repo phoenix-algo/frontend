@@ -13,19 +13,18 @@ import problemUtil from "util/problem";
 import NavPills from "components/NavPills/NavPills.js";
 import GeneralEditTab from "./EditTabs/GeneralEditTab";
 import DescriptionEditTab from "./EditTabs/DescriptionEditTab";
-import ShortDescriptionEditTab from "./EditTabs/ShortDescriptionEditTab";
 import CreateTestEditTab from "./EditTabs/CreateTestEditTab";
 import UpdateTests from "./EditTabs/UpdateTests";
 
 export default function EditProblemPage() {
-    const {problemName} = useParams();
+    const {problemId} = useParams();
     const [problem, setProblem] = useState({});
     const [loading, setLoading] = useState(true);
     const [fetchingStatus, setFetchingStatus] = useState(200);
 
     const fetchProblem = async() => {
         try {
-            const res = await problemAPI.getByName(problemName);
+            const res = await problemAPI.getById(problemId);
             setProblem(res);
         } catch (err) {
             console.error(err);
@@ -51,7 +50,7 @@ export default function EditProblemPage() {
     }
 
     const problemLink = () => {
-        return `/problems/${problemName}`;
+        return `/problems/${problem.ID}`;
     }
 
     useEffect(fetchProblem, []);
@@ -80,8 +79,8 @@ export default function EditProblemPage() {
         <Navbar color="white" fixed ={false}/> 
         <Container style={{border: "1px solid grey", marginTop: "100px", marginBottom: "50px"}}>
             <h3>
-                Edit Problem  {"  "}
-                <Link to={problemLink} style={{color: "blue"}}>{problemName}</Link>
+                Edit problem  {"  "}
+                <Link to={problemLink} style={{color: "blue"}}>{problem.Name}</Link>
             </h3>
             <NavPills color = "info"
                     tabs = {[
@@ -94,10 +93,6 @@ export default function EditProblemPage() {
                         tabButton: "Description",
                         tabContent: <DescriptionEditTab problem={problem} setProblem={setProblem}/>,
                     },
-                    {
-                        tabButton: "Short Description",
-                        tabContent: <ShortDescriptionEditTab problem={problem} setProblem={setProblem}/>,
-                    }, 
                     {
                         tabButton: "Create Test",
                         tabContent: <CreateTestEditTab problem={problem} />,

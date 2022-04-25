@@ -40,8 +40,6 @@ export default function ProposerPage() {
            stackLimit: 16384,
            timeLimit: 1,
            difficulty: "easy",
-           stream: "console",
-           grade: "9",
         };
 
         try {
@@ -49,7 +47,7 @@ export default function ProposerPage() {
             toast.success("Problem created successfully!", toastConfig);
         } catch(err) {
             console.error(err);
-            const message = err.response.data.message;
+            const message = err.response.data; 
             toast.error(message, toastConfig);
         }
    }
@@ -70,21 +68,21 @@ export default function ProposerPage() {
         <CssBaseline/>
         <Navbar color="white" fixed ={false} />
         <Container style={{marginTop: "100px"}}>
-            <h2 style={{textAlign: "center"}}>Panou Propunator</h2>
+            <h2 style={{textAlign: "center"}}>Proposer Panel</h2>
             <form action="" onSubmit={handleSubmit} style={{border: "1px solid #9e9e9e", padding: "4px"}} className={classes.root} noValidate autoComplete="off">
-                <h3>Creare Problema</h3>
+                <h3>Create Problem</h3>
                 <TextField
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     id="outlined-secondary"
-                    label="Nume problema"
+                    label="Problem Name"
                     variant="outlined"
                     color="secondary"
                     style={{width: "99%"}}
                 />
                 <br/>
                <Button type="submit" variant="contained" color="primary" >
-                    Creare
+                    Create 
                 </Button>
             </form>
         </Container>

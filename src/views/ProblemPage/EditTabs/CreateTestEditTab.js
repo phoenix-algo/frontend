@@ -22,23 +22,23 @@ export default function CreateTestEditTab({problem}) {
     const [output, setOutput] = useState("");
 
     const onScoreChange = (e) => {
-        const value = e.target.value;
+        const value = parseInt(e.target.value);
 
         if (value > 0 && value <= 100)
             setScore(value);
     }
 
     const handleCreateTest = async() => {
-        if (input.trim() === "" && output.trim() === "") {
+        if (input.trim() === "" || output.trim() === "") {
             toast.warning("Please enter a valid input and output", toastConfig);
             return;
         }
         try {
-            await testAPI.createProblemTest(problem.name, score, input, output);
+            await testAPI.createProblemTest(problem.ID, score, input, output);
             toast.success("Test created successfully!", toastConfig);
         } catch(err) {
             console.error(err);
-            const message = err?.response?.data?.message;
+            const message = err?.response?.data;
 
             if (message != null)
                 toast.error(`Could not create test: ${message}`, toastConfig);

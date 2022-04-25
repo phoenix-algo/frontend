@@ -26,10 +26,9 @@ export default function HeaderLinks(props) {
     window.location.reload();
   }
 
-  // TODO FIX 
   const getUserProfileLink = () => {
-    const user = userUtil.getUser();
-    return `/profile/${user.username}`
+    const user = userUtil.getUserData();
+    return `/profile/${user.Username}`
   }
 
   const redirectToProfilePage = () => {

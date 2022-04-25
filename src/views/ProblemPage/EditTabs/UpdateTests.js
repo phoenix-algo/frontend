@@ -7,6 +7,8 @@ import { FormControl } from '@material-ui/core';
 import { Box } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import { ToastContainer, toast } from 'react-toastify';
+import { TextField } from "@material-ui/core";
+import util from "../../../util/util";
 
 const toastConfig = {
     fontSize: 30,
@@ -21,14 +23,24 @@ const toastConfig = {
 
 export default function UpdateTests({problem}) {
     const [tests, setTests] = useState([]);
-
-    const [testId, setTestId] = useState(-1);
     const [test, setTest] = useState({});
 
+    const [testId, setTestId] = useState(-1);
+    const [score, setScore] = useState(0)
+    const [input, setInput] = useState("");
+    const [output, setOutput] = useState("");
+
     const fetchProblemTests = async() => {
-        const tests = await testAPI.getProblemTests(problem.name);
+        const tests = await testAPI.getProblemTests(problem.ID);
         setTests(tests);
     };
+
+    const onScoreChange = (e) => {
+        const value = parseInt(e.target.value);
+
+        if (value > 0 && value <= 100)
+            setScore(value);
+    }
 
     const handleTestIdChange = async() => { 
         if(testId === -1) {
@@ -36,17 +48,21 @@ export default function UpdateTests({problem}) {
             return;
         }
 
-        const test = await testAPI.getProblemTestById(problem.name, testId);
+        const test = await testAPI.getProblemTestById(problem.ID, testId);
         setTest(test);
+
+        setScore(test.Score);
+        setInput(util.decodeBase64String(test.Input))
+        setOutput(util.decodeBase64String(test.Output))
     };
 
     const handleTestUpdate = async() => {
         try {
-            await testAPI.updateProblemTestById(problem.name, testId, test.test.score, test.input, test.output);
+            await testAPI.updateProblemTestById(problem.ID, testId, score, input, output);
             toast.success("Test updated successfully!", toastConfig);
         } catch(err) {
             console.error(err);
-            const message = err?.response?.data?.message;
+            const message = err?.response?.data;
 
             if (message != null)
                 toast.error(`Test update failed: ${message}`, toastConfig);
@@ -57,20 +73,20 @@ export default function UpdateTests({problem}) {
 
     const removeTest = (testId) => {
         let list = [...tests];
-        list = list.filter(test => test.id != testId);
+        list = list.filter(test => test.ID != testId);
         setTests(list);
     };
 
     const handleDeleteTest = async() => {
         if (confirm("Are you sure you want to delete this test?")) {
             try {
-                await testAPI.deleteProblemTestById(problem.name, testId);
+                await testAPI.deleteProblemTestById(problem.ID, testId);
                 toast.success(`Test ${testId} deleted!`, toastConfig);
                 removeTest(testId);
                 setTestId(-1);
             } catch(err) {
                 console.error(err);
-                const message = err?.response?.data?.message;
+                const message = err?.response?.data;
 
                 if (message != null)
                     toast.error(`Could not delete test: ${message}`, toastConfig);
@@ -79,35 +95,6 @@ export default function UpdateTests({problem}) {
             }
         }
     };
-
-    const setTestInput = (e) => {
-        const value = e.target.value;
-
-        setTest({
-            ...test,
-            input: value,
-        });
-    }
-
-    const setTestScore = (e) => {
-        const value = e.target.value;
-
-        setTest({
-            ...test,
-            test: {
-                score: score,
-            }
-        });
-    }
-
-    const setTestOutput = (e) => {
-        const value = e.target.value;
-
-        setTest({
-            ...test,
-            output: value,
-        });
-    }
 
     useEffect(fetchProblemTests, []);
     useEffect(handleTestIdChange, [testId]);
@@ -125,7 +112,7 @@ export default function UpdateTests({problem}) {
                 draggable={false}
                 pauseOnHover={false}
             />
-            <Box sx={{ minWidth: 120 }}>
+            <Box sx={{ minWidth: 120 }} style={{marginBottom: "16px"}}>
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Test Id</InputLabel>
                     <Select
@@ -138,7 +125,7 @@ export default function UpdateTests({problem}) {
                         <MenuItem value={-1}>-</MenuItem>
                         {
                             tests.map((test) => {
-                            return <MenuItem key={test.id} value={test.id}>{test.id}</MenuItem>
+                            return <MenuItem key={test.ID} value={test.ID}>{test.ID}</MenuItem>
                             })
                         }
                     </Select>
@@ -147,25 +134,28 @@ export default function UpdateTests({problem}) {
 
             {testId !== -1 &&
                 <>
-                {/* TODO score */}
-                    {/* <h4>Score: </h4>
-                    <input
-                        value={test.test.score}
-                        onChange={setTestScore}
-                        style={{resize: "none", width: "100%", minHeight: "200px"}}>
-                    </input> */}
+                    <TextField
+                        value={score}
+                        onChange={onScoreChange}
+                        type="number"
+                        id="outlined-secondary"
+                        label="Score"
+                        variant="outlined"
+                        color="secondary"
+                        style={{width: "100%", marginBottom: "10px"}}
+                    />
 
                     <h4>Input: </h4>
                     <textarea 
-                        value={test.input}
-                        onChange={setTestInput}
+                        value={input}
+                        onChange={e => setInput(e.target.value)}
                         style={{resize: "none", width: "100%", minHeight: "200px"}}
                     />
 
                     <h4>Output: </h4>
                     <textarea 
-                        value={test.output}
-                        onChange={setTestOutput}
+                        value={output}
+                        onChange={e => setOutput(e.target.value)}
                         style={{resize: "none", width: "100%", minHeight: "200px"}}
                     />
 

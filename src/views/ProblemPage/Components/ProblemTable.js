@@ -20,7 +20,6 @@ export default function ProblemTable({ data }) {
   const classes = useStyles();
 
   return (
-    // TODO add problem difficulty
     <TableContainer component={Paper} style={{marginBottom: "20px"}}>
       <Table aria-label="simple table">
         <TableHead>

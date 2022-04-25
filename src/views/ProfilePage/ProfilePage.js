@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import classNames from "classnames";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -11,19 +11,21 @@ import Navbar from "components/Navbar/Navbar";
 
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
 import userAPI from "api/user";
-import userUtil from "util/user";
 
 import Loading from "views/Components/Loading";
 import InternalServerError from "views/Components/InternalServerError";
 import NotFound from "views/Components/NotFound";
 
+import Email from "@material-ui/icons/Email";
+import { Web } from "@material-ui/icons";
+import { LinkedIn } from "@material-ui/icons";
+import GitHub from "@material-ui/icons/GitHub";
+
 const useStyles = makeStyles(styles);
 
 export default function ProfilePage() {
-    const { username } = useParams();
-
+    const {username} = useParams();
     const [user, setUser] = useState({})
-    const [emailHash, setEmailHash] = useState("")
 
     const classes = useStyles();
 
@@ -40,9 +42,6 @@ export default function ProfilePage() {
         try {
             const user = await userAPI.getByUsername(username);
             setUser(user);
-
-            const emailHash = userUtil.calculateEmailHash(user.email)
-            setEmailHash(emailHash);
         } catch(err) {
             console.error(err);
 
@@ -65,8 +64,8 @@ export default function ProfilePage() {
         }
     }
 
-    const getGravatarURI = (imgSize) => {
-        return `https://www.gravatar.com/avatar/${emailHash}?s=${imgSize}`;
+    const getGravatarURI = () => {
+        return user.UserIconURL
     }
 
     useEffect(fetchUser, []);
@@ -85,6 +84,20 @@ export default function ProfilePage() {
         return <InternalServerError/>
     }
 
+    /*
+    <GridItem xs={4} sm={4} md={12}>
+        <div className={classes.profile}>
+        <div>
+            <img src={getGravatarURI()} alt="..." className={imageClasses} />
+        </div>
+        <div className={classes.name}>
+            <h3 className={classes.title}>{user.Username}</h3>
+            <h5 style={{textTransform: "lowercase"}}>{user.Email}</h5>
+        </div>
+        </div>
+    </GridItem>
+    */
+
     return (
         <div>
         <Navbar color="transparent" fixed ={false}/> 
@@ -95,26 +108,66 @@ export default function ProfilePage() {
         />
         <div className={classNames(classes.main, classes.mainRaised)}>
             <div>
-            <div className={classes.container}>
-                <GridContainer justifyContent="center">
-                <GridItem xs={12} sm={12} md={6}>
-                    <div className={classes.profile}>
-                    <div>
-                        <img src={getGravatarURI(500)} alt="..." className={imageClasses} />
-                    </div>
-                    <div className={classes.name}>
-                        <h3 className={classes.title}>{user.username}</h3>
-                        <h5 style={{textTransform: "lowercase"}}>{user.email}</h5>
-                    </div>
-                    </div>
-                </GridItem>
+            <div>
+                <GridContainer>
+                    <GridItem xs={12} sm={12} md={12}>
+                        <div className={classes.profile}>
+                            <img src={getGravatarURI()} alt="..." className={imageClasses} />
+                        </div>
+                    </GridItem>
                 </GridContainer>
-                <div className={classes.description}>
-                    <p>
-                    {user.bio}
-                    </p>
-                </div>
-               {/* TODO */}
+
+                <GridContainer style={{padding: "0 12px", position: "relative", top: "-50px"}}>
+                    <GridItem xs={4} sm={4} md={4} style={{border: "1px solid black"}}>
+                        
+                        <p style={{fontWeight: "bold", margin: 0, padding: 0}}>
+                            {user.Bio}
+                        </p> <br/>
+
+                        <Email/> 
+                        <span style={{position: "relative", top: "-6px", left: "6px"}}>
+                            <a style={{color: "blue"}} href={"mailto:" + user.Email}>{user.Email}</a>
+                        </span> <br/>
+
+                        {user.WebsiteURL != "" &&
+                            <>
+                                <Web/>
+                                <span style={{position: "relative", top: "-6px", left: "6px"}}>
+                                    <a target="_blank" style={{color: "blue"}} href={user.WebsiteURL}>{user.WebsiteURL}</a>
+                                </span> <br/>
+                            </>
+                        }
+
+                        {user.LinkedInURL != "" &&
+                            <>
+                                <LinkedIn/>
+                                <span style={{position: "relative", top: "-6px", left: "6px"}}>
+                                    <a target="_blank" style={{color: "blue"}} href={user.LinkedInURL}>{user.LinkedInURL}</a>
+                                </span> <br/>
+                            </>
+                        }
+
+                        {user.GithubURL != "" &&
+                            <>
+                                <GitHub/>
+                                <span style={{position: "relative", top: "-6px", left: "6px"}}>
+                                    <a target="_blank" style={{color: "blue"}} href={user.GithubURL}>{user.GithubURL}</a>
+                                </span> <br/>
+                            </>
+                        }
+
+
+
+
+
+
+
+
+                    </GridItem>
+                </GridContainer>
+            
+
+
             </div>
             </div>
         </div>

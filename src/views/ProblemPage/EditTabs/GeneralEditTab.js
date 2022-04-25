@@ -5,6 +5,11 @@ import Button from '@material-ui/core/Button';
 import problemAPI from "api/problem";
 import { ToastContainer, toast } from 'react-toastify';
 import { useHistory } from "react-router";
+import { Box } from '@material-ui/core';
+import { FormControl } from '@material-ui/core';
+import { MenuItem } from '@material-ui/core';
+import { InputLabel } from '@material-ui/core';
+import { Select } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,20 +31,15 @@ const toastConfig = {
     progress: undefined,
 };
 
+
 export default function GeneralEditTab({problem, setProblem}) {
     const classes = useStyles();
     const history = useHistory();
 
-    const [memoryLimit, setMemoryLimit] = useState(problem.memoryLimit);
-    const [stackLimit, setStackLimit] = useState(problem.stackLimit);
-    const [timeLimit, setTimeLimit] = useState(problem.timeLimit);
-    const [grade, setGrade] = useState(problem.grade);
-
-    const onGradeChange = (e) => {
-        const value = e.target.value;
-        if (value >= 9 && value <= 11)
-            setGrade(value);
-    }
+    const [difficulty, setDifficulty] = useState(problem.Difficulty);
+    const [memoryLimit, setMemoryLimit] = useState(problem.MemoryLimit);
+    const [stackLimit, setStackLimit] = useState(problem.StackLimit);
+    const [timeLimit, setTimeLimit] = useState(problem.TimeLimit);
 
     const onMemoryLimitChange = (e) => {
         const value = e.target.value;
@@ -61,19 +61,19 @@ export default function GeneralEditTab({problem, setProblem}) {
 
     const handleProblemUpdate = async() => {
         try {
-            await problemAPI.update(problem.name, {
-                grade: grade,
+            await problemAPI.update(problem.ID, {
+                difficulty: difficulty,
                 timeLimit: parseFloat(timeLimit),
                 memoryLimit: parseFloat(memoryLimit),
                 stackLimit: parseFloat(stackLimit), 
             });
 
             setProblem({
-                ...problem, 
-                grade: grade, 
-                timeLimit: timeLimit, 
-                memoryLimit: memoryLimit,
-                stackLimit: stackLimit,
+                ...problem,
+                TimeLimit: timeLimit, 
+                MemoryLimit: memoryLimit,
+                StackLimit: stackLimit,
+                Difficulty: difficulty
             });
 
             toast.success("Problem updated successfully!", toastConfig);
@@ -91,20 +91,20 @@ export default function GeneralEditTab({problem, setProblem}) {
     const handleDeleteProblem = async () => {
         if (confirm("Are you sure you want to delete this problem?")) {
             try {
-                await problemAPI.delete(problem.name);
-                toast.success(`Problem ${problem.name} deleted! Redirecting you to the home page!`, toastConfig);
+                await problemAPI.delete(problem.ID);
+                toast.success(`Problem ${problem.Name} deleted! Redirecting you to the problems page!`, toastConfig);
                 
                 setTimeout(() => {
-                    history.push("/");
+                    history.push("/problems");
                 }, 2000);
             } catch(err) {
                 console.error(err);
-                const message = err?.response?.data?.message;
+                const message = err?.response?.data;
 
                 if (message != null)
-                    toast.error(`Could not update problem: ${message}`, toastConfig);
+                    toast.error(`Could not delete problem: ${message}`, toastConfig);
                 else
-                    toast.error("Could not update problem", toastConfig);
+                    toast.error("Could not delete problem", toastConfig);
             }
         }
     };
@@ -123,16 +123,33 @@ export default function GeneralEditTab({problem, setProblem}) {
                 pauseOnHover={false}
             />
             <div style={{border: "1px solid #01579b", padding: "4px", marginBottom: "20px"}} className={classes.root}>
-                <TextField
-                    value={grade}
-                    onChange={onGradeChange}
-                    type="number"
-                    id="outlined-secondary"
-                    label="Grade"
-                    variant="outlined"
-                    color="secondary"
-                    style={{width: "99%"}}
-                />
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable={false}
+                pauseOnHover={false}
+            />
+            <Box style={{margin: "12px",width: "98.5%"}}>
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
+                    <Select
+                        labelId="difficulty"
+                        id="difficulty"
+                        value={difficulty}
+                        label="difficulty"
+                        onChange={(e) => setDifficulty(e.target.value)}
+                    >
+                        <MenuItem value={"easy"}>{"easy"}</MenuItem>
+                        <MenuItem value={"medium"}>{"medium"}</MenuItem>
+                        <MenuItem value={"hard"}>{"hard"}</MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
                 <TextField
                     value={memoryLimit}
                     onChange={onMemoryLimitChange}

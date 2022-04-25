@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/components.js";
 import classNames from "classnames";
-import useQuery from "hooks/query";
+import InternalServerError from "views/Components/InternalServerError";
 import Problems from "views/ProblemsPage/Components/Problems";
 import Footer from "components/Footer/Footer";
 import Loading from "views/Components/Loading";

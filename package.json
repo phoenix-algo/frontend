@@ -1,6 +1,6 @@
 {
   "name": "phoenix",
-  "version": "1.10.0",
+  "version": "1.0.0",
   "description": "Phoenix frontend",
   "private": true,
   "main": "src/index.js",

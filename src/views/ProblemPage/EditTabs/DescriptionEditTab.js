@@ -16,12 +16,16 @@ const toastConfig = {
 };
 
 export default function DescriptionEditTab({problem, setProblem}) {
-    const [description, setDescription] = useState(problem.description);
+    const [description, setDescription] = useState(problem.Description);
 
     const handleDescriptionUpdate = async() => {
         try {
-            await problemAPI.update(problem.name, {
-                description,
+            await problemAPI.update(problem.ID, {
+                difficulty: problem.Difficulty,
+                timeLimit: parseFloat(problem.TimeLimit),
+                memoryLimit: parseFloat(problem.MemoryLimit),
+                stackLimit: parseFloat(problem.StackLimit),
+                description: description,
             });
 
             setProblem({
@@ -32,7 +36,7 @@ export default function DescriptionEditTab({problem, setProblem}) {
             toast.success("Problem description updated successfully!", toastConfig);
         } catch(err) {
             console.error(err);
-            const message = err?.response?.data?.message;
+            const message = err?.response?.data;
 
             if (message != null)
                 toast.error(`Could not update problem description: ${message}`, toastConfig);
