@@ -61,7 +61,7 @@ export default function GeneralEditTab({problem, setProblem}) {
 
     const handleProblemUpdate = async() => {
         try {
-            await problemAPI.update(problem.ID, {
+            await problemAPI.update(problem.Name, {
                 difficulty: difficulty,
                 timeLimit: parseFloat(timeLimit),
                 memoryLimit: parseFloat(memoryLimit),
@@ -91,7 +91,7 @@ export default function GeneralEditTab({problem, setProblem}) {
     const handleDeleteProblem = async () => {
         if (confirm("Are you sure you want to delete this problem?")) {
             try {
-                await problemAPI.delete(problem.ID);
+                await problemAPI.delete(problem.Name);
                 toast.success(`Problem ${problem.Name} deleted! Redirecting you to the problems page!`, toastConfig);
                 
                 setTimeout(() => {

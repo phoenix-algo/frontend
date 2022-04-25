@@ -10,18 +10,18 @@ const testAPI = {
     deleteProblemTestById,
 };
 
-function getProblemTests(problemId) {
-    return axios.get(`${config.apiUrl}/problems/${problemId}/tests`, 
+function getProblemTests(problemName) {
+    return axios.get(`${config.apiUrl}/problems/${problemName}/tests`, 
         config.cors).then(res => res.data);
 }
 
-function getProblemTestById(problemId, testId) {
-    return axios.get(`${config.apiUrl}/problems/${problemId}/tests/${testId}`, 
+function getProblemTestById(problemName, testId) {
+    return axios.get(`${config.apiUrl}/problems/${problemName}/tests/${testId}`, 
         config.cors).then(res => res.data);
 }
 
-function updateProblemTestById(problemId, testId, score, input, output) {
-    return axios.put(`${config.apiUrl}/problems/${problemId}/tests/${testId}`, {
+function updateProblemTestById(problemName, testId, score, input, output) {
+    return axios.put(`${config.apiUrl}/problems/${problemName}/tests/${testId}`, {
         score: parseInt(score),
         input: util.stringToByteArray(input),
         output: util.stringToByteArray(output),
@@ -33,9 +33,9 @@ function deleteProblemTestById(problemName, testId) {
         ,config.cors).then(res => res.data);
 }
 
-function createProblemTest(problemId, score, input, output) {
+function createProblemTest(problemName, score, input, output) {
     console.log(util);
-    return axios.post(`${config.apiUrl}/problems/${problemId}/tests`, {
+    return axios.post(`${config.apiUrl}/problems/${problemName}/tests`, {
         score: parseInt(score),
         input: util.stringToByteArray(input),
         output: util.stringToByteArray(output),

@@ -17,24 +17,24 @@ import CreateTestEditTab from "./EditTabs/CreateTestEditTab";
 import UpdateTests from "./EditTabs/UpdateTests";
 
 export default function EditProblemPage() {
-    const {problemId} = useParams();
+    const {problemName} = useParams();
     const [problem, setProblem] = useState({});
     const [loading, setLoading] = useState(true);
     const [fetchingStatus, setFetchingStatus] = useState(200);
 
     const fetchProblem = async() => {
         try {
-            const res = await problemAPI.getById(problemId);
+            const res = await problemAPI.getByName(problemName);
             setProblem(res);
         } catch (err) {
             console.error(err);
 
-            if (err.message == "Network Error") {
+            if (err?.message == "Network Error") {
                 setFetchingStatus(500)
                 return;
             }
 
-            if (err.response.status === 404) {
+            if (err?.response?.status === 404) {
                 setFetchingStatus(404);
                 return;
             }
@@ -50,7 +50,7 @@ export default function EditProblemPage() {
     }
 
     const problemLink = () => {
-        return `/problems/${problem.ID}`;
+        return `/problems/${problem.Name}`;
     }
 
     useEffect(fetchProblem, []);

@@ -20,7 +20,7 @@ export default function DescriptionEditTab({problem, setProblem}) {
 
     const handleDescriptionUpdate = async() => {
         try {
-            await problemAPI.update(problem.ID, {
+            await problemAPI.update(problem.Name, {
                 difficulty: problem.Difficulty,
                 timeLimit: parseFloat(problem.TimeLimit),
                 memoryLimit: parseFloat(problem.MemoryLimit),

@@ -31,7 +31,7 @@ export default function UpdateTests({problem}) {
     const [output, setOutput] = useState("");
 
     const fetchProblemTests = async() => {
-        const tests = await testAPI.getProblemTests(problem.ID);
+        const tests = await testAPI.getProblemTests(problem.Name);
         setTests(tests);
     };
 
@@ -48,7 +48,7 @@ export default function UpdateTests({problem}) {
             return;
         }
 
-        const test = await testAPI.getProblemTestById(problem.ID, testId);
+        const test = await testAPI.getProblemTestById(problem.Name, testId);
         setTest(test);
 
         setScore(test.Score);
@@ -58,7 +58,7 @@ export default function UpdateTests({problem}) {
 
     const handleTestUpdate = async() => {
         try {
-            await testAPI.updateProblemTestById(problem.ID, testId, score, input, output);
+            await testAPI.updateProblemTestById(problem.Name, testId, score, input, output);
             toast.success("Test updated successfully!", toastConfig);
         } catch(err) {
             console.error(err);
@@ -80,7 +80,7 @@ export default function UpdateTests({problem}) {
     const handleDeleteTest = async() => {
         if (confirm("Are you sure you want to delete this test?")) {
             try {
-                await testAPI.deleteProblemTestById(problem.ID, testId);
+                await testAPI.deleteProblemTestById(problem.Name, testId);
                 toast.success(`Test ${testId} deleted!`, toastConfig);
                 removeTest(testId);
                 setTestId(-1);

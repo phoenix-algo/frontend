@@ -42,7 +42,7 @@ const ProblemPage = () => {
     const [submissionId, setSubmissionId] = useState(-1);
     const [fetchingStatus, setFetchingStatus] = useState(200);
     
-    const { problemId } = useParams();
+    const { problemName } = useParams();
     const [problem, setProblem] = useState({})
 
     const [code, setCode] = useState(`#include <stdio.h>\n\nint main() {\n  int a, b;\n\n  scanf("%d %d", &a, &b);\n  printf("%d", a + b);\n\n  return 0;\n}`);
@@ -60,7 +60,7 @@ const ProblemPage = () => {
 
     const fetchProblem = async() => {
         try {
-            const res = await problemAPI.getById(problemId);
+            const res = await problemAPI.getByName(problemName);
             setProblem(res);
         } catch (err) {
             console.error(err);
@@ -128,7 +128,7 @@ const ProblemPage = () => {
 
     const handleCodeSubmission = async() => {
         try {
-            const res = await submissionAPI.create(stringToByteArray(code), lang, problem.ID);
+            const res = await submissionAPI.create(stringToByteArray(code), lang, problem.Name);
             setSubmissionId(res.ID);
             
             toast.info("Submission Sent", {
@@ -147,7 +147,7 @@ const ProblemPage = () => {
     }
 
     const editProblemLink = () => {
-        return `/problems/${problem.ID}/edit`;
+        return `/problems/${problem.Name}/edit`;
     }
 
     useEffect(fetchProblem, []);

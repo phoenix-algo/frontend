@@ -34,7 +34,7 @@ export default function CreateTestEditTab({problem}) {
             return;
         }
         try {
-            await testAPI.createProblemTest(problem.ID, score, input, output);
+            await testAPI.createProblemTest(problem.Name, score, input, output);
             toast.success("Test created successfully!", toastConfig);
         } catch(err) {
             console.error(err);

@@ -10,7 +10,7 @@ import {Link} from "react-router-dom";
 const Problem = ({problem}) => {
 
     const problemLink = () => {
-        return `/problems/${problem.ID}`
+        return `/problems/${problem.Name}`
     }
 
     return(
