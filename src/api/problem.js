@@ -3,6 +3,7 @@ import config from "config";
 
 const problemAPI = {
     getByName,
+    getById,
     getAll,
     create,
     update,
@@ -11,6 +12,11 @@ const problemAPI = {
 
 function getByName(problemName) {
     return axios.get(`${config.apiUrl}/problems/${problemName}`, config.cors)
+        .then(res => res.data)
+}
+
+function getById(problemId) {
+    return axios.get(`${config.apiUrl}/problems?problemId=${problemId}`, config.cors)
         .then(res => res.data)
 }
 

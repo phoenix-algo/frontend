@@ -19,15 +19,16 @@ import SubmissionStatus from "./Components/SubmissionStatus";
 import Loading from "views/Components/Loading";
 import NotFound from "views/Components/NotFound";
 import InternalServerError from "views/Components/InternalServerError";
+import userAPI from "api/user";
 
 const useStyles = makeStyles(styles);
 
 export default function SubmissionPage(props) {
 
     const [problem, setProblem] = useState({});
+    const [author, setAuthor] = useState(undefined);
     const [submission, setSubmission] = useState({});
     const [submissionTests, setSubmissionTests] = useState([]);
-    const [avatar, setAvatar] = useState({ image: "", username:"" })
 
     const [loading, setLoading] = useState(true);
     const [fetchingStatus, setFetchingStatus] = useState(200);
@@ -37,30 +38,40 @@ export default function SubmissionPage(props) {
 
     useEffect(async() => {
         try {
-            const submission = await submissionAPI.getById(submissionId);
-            const problem = await problemAPI.getById(submission.problemId);
-            const submissionTests = await submissionTestAPI.getBySubmissionId(submissionId);
-            const avatar = await avatarAPI.get(submission.userId, 25)
+            const [submission, submissionTests] = await Promise.all([
+                submissionAPI.getById(submissionId),
+                submissionTestAPI.getBySubmissionId(submissionId)
+            ]);
 
-            console.log("submission", submission);
-            console.log("problem", problem[0]);
-            console.log("submissionTests", submissionTests);
-            console.log("avatar", avatar);
-
-            
-            setProblem(problem[0]);
-            setSubmissionTests(submissionTests);
             setSubmission(submission);
-            setAvatar(avatar);
+            setSubmissionTests(submissionTests);
+
+            const [problem, user] = await Promise.all([
+                problemAPI.getById(submission.ProblemId),
+                userAPI.getById(submission.UserId)
+            ]);
+           
+            if (problem.length == 0) {
+                setFetchingStatus(404);
+                return;
+            }
+
+            if (user.length == 0) {
+                setFetchingStatus(404);
+                return;
+            }
+
+            setProblem(problem[0]);
+            setAuthor(user[0]);
         } catch(err) {
             console.error(err);
 
-            if (err.message == "Network Error") {
+            if (err?.message == "Network Error") {
                 setFetchingStatus(500)
                 return;
             }
 
-            if (err.response.status === 404) {
+            if (err?.response?.status === 404) {
                 setFetchingStatus(404);
                 return;
             }
@@ -80,7 +91,7 @@ export default function SubmissionPage(props) {
 
     // 4xx (bad request or not found)
     if (Math.round(fetchingStatus / 100) == 4) {
-        return <NotFound message="Problema cautata nu a fost gasita"/>   
+        return <NotFound message="The submission you are looking for does not exist"/>   
     }
 
     // 5xx (internal server error)
@@ -88,8 +99,8 @@ export default function SubmissionPage(props) {
         return <InternalServerError/>
     }
 
-    const authorProfile = (username) => {
-        return `/profile/${username}`
+    const authorProfile = () => {
+        return `/profile/${author.Username}`
     }
 
     return (
@@ -98,14 +109,17 @@ export default function SubmissionPage(props) {
             <div style={{marginTop: "100px"}} className={classNames(classes.main, classes.mainRaised)}>
                 <Grid container spacing={1} style={{padding: "12px"}}>
                     <Grid item xl={2} md={3} xs={12} style={{textAlign: "center"}}>
-                        <h3>Submission #{submission.id}</h3>
-                        <h3>Author: {"  "}
-                            <a style={{color: "inherit", textDecoration: "underline"}} href={authorProfile(avatar.username)}>
-                                {avatar.username} {"   "}
-                                <img src={`data:image/png;base64,${avatar.image}`} alt="user icon"/>
-                            </a>    
-                        </h3>
-                        <h3>Score: {submission.score}</h3>
+                        <h3>Submission #{submission.ID}</h3>
+                        {author != undefined &&
+                            <h3>Author: {"  "}
+                                <a style={{color: "inherit", textDecoration: "underline"}} href={authorProfile()}>
+                                    <img style={{borderRadius: "50%", width: "32px"}} src={author.UserIconURL} alt="user icon"/>
+                                    {"   "}
+                                    {author.Username} 
+                                </a>    
+                            </h3>
+                        }
+                        <h3>Score: {submission.Score}</h3>
                     </Grid>
                     <Grid item xl={10} md={9} xs={12}>
                         <ProblemCard 

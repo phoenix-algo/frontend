@@ -1,5 +1,6 @@
 import React from "react";
 import CodeEditor from '@uiw/react-textarea-code-editor';
+import util from "../../../util/util";
 
 export default function SubmissionSourceCode({problem, submission}) {
    
@@ -16,8 +17,8 @@ export default function SubmissionSourceCode({problem, submission}) {
             <h3>Source Code</h3>
             <div style={{overflow: "auto", maxHeight: "500px"}}>
                 <CodeEditor 
-                    value={submission.sourceCode} 
-                    language={submission.lang}
+                    value={util.decodeBase64String(submission.SourceCode)} 
+                    language={submission.Language}
                     minHeight={200}
                     placeholder=""
                     readOnly={true}

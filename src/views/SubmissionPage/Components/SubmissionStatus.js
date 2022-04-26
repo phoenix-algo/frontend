@@ -26,17 +26,19 @@ export default function SubmissionStatus({ submission, submissionTests }) {
     const classes = useStyles();
 
     const rowStyle = (test) => {
-        return test.score == 0 ? {backgroundColor: "#ff3d00"} : {backgroundColor: "#43a047"}
+        return test.Score == 0 ? {backgroundColor: "#ff3d00"} : {backgroundColor: "#43a047"}
     } 
 
     return (
         <div>
             <h3>Submission Status</h3>
-            {submission.hasCompileError && 
+            {submission.CompiledSuccesfully == false && 
                 <>
                     <h4 style={{color:"#bf360c"}}>Compilation Message</h4>
                     <Box style={{border: "2px solid #dd2c00", padding: "12px 16px", marginBottom: "20px"}}>
-                        {submission.message}
+                        {submission.Message}
+                        {"\n"}
+                        {submission.CompilationMessage}
                     </Box>
                 </>
             }
@@ -57,17 +59,17 @@ export default function SubmissionStatus({ submission, submissionTests }) {
                             {submissionTests && submissionTests.map((test, indx) => (
                                 <TableRow key={test.id} style={rowStyle(test)}>
                                     <TableCell component="th" scope="row">{indx + 1}</TableCell>
-                                    <TableCell>{test.time.toFixed(3)}</TableCell>
-                                    <TableCell>{test.memory} KB</TableCell>
-                                    <TableCell>{test.message ? test.message : "-"}</TableCell>
-                                    <TableCell align="right">{test.score}</TableCell>
+                                    <TableCell>{test.Time.toFixed(3)}</TableCell>
+                                    <TableCell>{test.Memory} KB</TableCell>
+                                    <TableCell>{test.ExecutionMessage ? test.ExecutionMessage : "-"}</TableCell>
+                                    <TableCell align="right">{test.Score}</TableCell>
                                 </TableRow>
                             ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
 
-                    <h3>Final Score: {submission.score}</h3> 
+                    <h3>Final Score: {submission.Score}</h3> 
                 </>
             }
         </div>

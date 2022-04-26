@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProblemCard({problem, submission}) {
+export default function ProblemCard({problem}) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
 
@@ -48,7 +48,7 @@ export default function ProblemCard({problem, submission}) {
   };
 
   const redirectToProblemPage = () => {
-      window.location.href = `/problems/${problem.name}`;
+      window.location.href = `/problems/${problem.Name}`;
   }
 
   return (
@@ -61,12 +61,12 @@ export default function ProblemCard({problem, submission}) {
                 PB
             </Avatar>
             }
-            title={problem.name ? problem.name : "title"}
-            subheader={problem.stream ? problem.stream : "console"}
+            title={problem.Name ? problem.Name : "title"}
+            subheader={"console"}
         />
         <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
-                <MDEditor.Markdown style={{marginBottom: "20px"}} source={problem.shortDescription} />
+                <MDEditor.Markdown style={{marginBottom: "20px"}} source={problem.Description} />
             </Typography>
         </CardContent>
         <CardActions disableSpacing>
@@ -86,12 +86,11 @@ export default function ProblemCard({problem, submission}) {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography>Grade: {problem.grade}</Typography>
-              <Typography>Difficulty: {problem.difficulty}</Typography>
-              <Typography paragraph>Stream: {problem.stream}</Typography>
-              <Typography>Time Limit: {problem.timeLimit}s</Typography>
-              <Typography>Memory Limit: {problem.memoryLimit} KB</Typography>
-              <Typography paragraph>Stack Limit: {problem.stackLimit} KB</Typography>
+              <Typography>Difficulty: {problem.Difficulty}</Typography>
+              <Typography paragraph>Stream: console</Typography>
+              <Typography>Time Limit: {problem.TimeLimit}s</Typography>
+              <Typography>Memory Limit: {problem.MemoryLimit} KB</Typography>
+              <Typography paragraph>Stack Limit: {problem.StackLimit} KB</Typography>
             </CardContent>
         </Collapse>
         </Card> 

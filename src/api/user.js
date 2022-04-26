@@ -3,6 +3,12 @@ import config from "../config";
 
 const userAPI = {
     getByUsername,
+    getById,
+}
+
+function getById(userId) {
+    return axios.get(`${config.apiUrl}/users?userId=${userId}`, config.cors)
+        .then(res => res.data);
 }
 
 function getByUsername(username) {
