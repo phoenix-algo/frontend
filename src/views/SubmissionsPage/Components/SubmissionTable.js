@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 import problemAPI from 'api/problem';
 import avatarAPI from 'api/avatar';
+import userAPI from 'api/user';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -32,8 +33,7 @@ const StyledTableRow = withStyles((theme) => ({
 
 const SubmissionRow = ({ submission }) => {
   const [problem, setProblem] = useState({name: ""});
-  const [avatar, setAvatar] = useState("");
-  const [username, setUsername] = useState("");
+  const [user, setUser] = useState(undefined);
 
   const submissionDate = (time) => {
     const date = new Date(time);
@@ -57,11 +57,11 @@ const SubmissionRow = ({ submission }) => {
   const submissionStatus = (submission) => {
     if (submission.status == "waiting")
         return "Waiting";
-    if(submission.status == "working")
+    if(submission.status == "evaluating")
         return "Evaluating";
-    if (submission.hasCompileError)
+    if (submission.CompiledSuccesfully === false)
         return "Compilation Error";
-    return `Evaluated: ${submission.score}`
+    return `Evaluated: ${submission.Score}`
   }
 
   const fetchProblem = async () => {
@@ -76,42 +76,48 @@ const SubmissionRow = ({ submission }) => {
     }
   }
 
-  const fetchAvatar = async() => {
+  const fetchUser = async () => {
     try {
-      const res = await avatarAPI.get(submission.userId, 25);
-      setAvatar(res.image);
-      setUsername(res.username);
+      const user = await userAPI.getById(submission.UserId);
+      console.log(user);
+      if (problem == null || problem.length == 0)
+        return;
+
+      setUser(user[0]);
     }catch(err) {
-      console.error(err);
+      console.log(err);
     }
   }
   
   useEffect(async() => {
-    const problem = fetchProblem();
-    const avatar  = fetchAvatar();
-    Promise.all([problem, avatar]);
+    await Promise.all([fetchProblem(), fetchUser()]);
+    console.log(user);
   }, []);
 
   return (
     <StyledTableRow>
       <StyledTableCell component="th" scope="row">
-        <Link to={`/submissions/${submission.id}`} style={{color: "black", textDecoration: "underline"}}>
-          {submission.id}
+        <Link to={`/submissions/${submission.ID}`} style={{color: "black", textDecoration: "underline"}}>
+          {submission.ID}
         </Link> 
       </StyledTableCell>
       <StyledTableCell>
-        <img src={`data:image/png;base64,${avatar}`} alt="user icon"/> {"   "}
-        {username}
+      {user != undefined &&
+            <a style={{color: "inherit", textDecoration: "underline"}} href={`/profile/${user.Username}`}>
+                <img style={{borderRadius: "50%", width: "32px"}} src={user.UserIconURL} alt="user icon"/> {"  "}
+                {user.Username} 
+            </a>    
+      } 
       </StyledTableCell>
       <StyledTableCell>
-        {submissionDate(submission.createdAt)} 
+        {submissionDate(submission.CreatedAt)} 
         {"    "}
-        {submissionTime(submission.createdAt)}
+        {submissionTime(submission.CreatedAt)}
       </StyledTableCell>
       <StyledTableCell>
-        {problem && problem.name && 
-        <Link to={`/problems/${problem.name}`} style={{color: "black", textDecoration: "underline"}}>
-          {problem.name}
+        {problem && problem.Name && 
+        <Link to={`/problems/${problem.Name}`} style={{color: "black", textDecoration: "underline"}}>
+          {problem.Name}
         </Link>
         }
       </StyledTableCell>

@@ -10,6 +10,7 @@ const submissionAPI = {
 
 function getByQuery(query, page) {
     const offset = page * config.submissionsLimit; 
+    console.log(offset)
 
     if (query == undefined || query == null || query == "")
         return axios.get(`${config.apiUrl}/submissions?limit=${config.submissionsLimit}&offset=${offset}`, config.cors)
@@ -24,7 +25,6 @@ function getById(id) {
         .then(res => res.data)
 }
 
-// OK 
 function getByUserAndProblem(user, problem) {
     return axios.get(`${config.apiUrl}/submissions?userId=${user.ID}&problemId=${problem.ID}`, config.cors)
         .then(res => res.data);

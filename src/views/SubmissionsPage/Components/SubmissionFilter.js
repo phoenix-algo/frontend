@@ -40,9 +40,7 @@ export default function SubmissionFilter(props) {
         props.setScore("");
       else {
         const nr = parseInt(value);
-
-        if(nr >= -1 && nr <= 100)
-          props.setScore(value);
+        props.setScore(value);
       }
     }
 
@@ -87,8 +85,8 @@ export default function SubmissionFilter(props) {
             select>
                 <MenuItem value="-">-</MenuItem>
                 <MenuItem value="waiting">Waiting for evaluation</MenuItem>
-                <MenuItem value="working">Evaluating</MenuItem>
-                <MenuItem value="finished">Evaluated</MenuItem>
+                <MenuItem value="evaluating">Evaluating</MenuItem>
+                <MenuItem value="evaluated">Evaluated</MenuItem>
         </TextField>
         <TextField 
             style={textFieldStyles()}

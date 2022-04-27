@@ -72,7 +72,8 @@ export default function SubmissionsPage() {
     const fetchSubmissions = async(query) => {
         try {
             const submissions = await submissionAPI.getByQuery(query, page);
-    
+            console.log(submissions);
+
             if (submissions !== null) {
                 setSubmissions(submissions);
             } else {
@@ -88,8 +89,9 @@ export default function SubmissionsPage() {
     const handleSubmit = async(e) => {
         e.preventDefault();
 
-        const query = buildSubmissionQuery()
-        history.push(`/submissions?${query}`)
+        const query = buildSubmissionQuery();
+        console.log(`/submissions?${query}`)
+        history.push(`/submissions?${query}`);
 
         try {
             await fetchSubmissions(query);
