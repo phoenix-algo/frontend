@@ -128,7 +128,7 @@ const ProblemPage = () => {
 
     const handleCodeSubmission = async() => {
         try {
-            const res = await submissionAPI.create(stringToByteArray(code), lang, problem.Name);
+            const res = await submissionAPI.create(stringToByteArray(code), lang, problem.ID);
             setSubmissionId(res.ID);
             
             toast.info("Submission Sent", {
