@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 import problemAPI from 'api/problem';
-import avatarAPI from 'api/avatar';
+import util from "../../../util/util";
 import userAPI from 'api/user';
 
 const StyledTableCell = withStyles((theme) => ({
@@ -34,25 +34,6 @@ const StyledTableRow = withStyles((theme) => ({
 const SubmissionRow = ({ submission }) => {
   const [problem, setProblem] = useState({name: ""});
   const [user, setUser] = useState(undefined);
-
-  const submissionDate = (time) => {
-    const date = new Date(time);
-    
-    const year  = date.getFullYear();
-    const month = date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth();
-    const day   = date.getDay() < 10 ? "0" + date.getDay() : date.getDay();
-
-    return day + "/" + month + "/" + year;
-  }
-
-  const submissionTime = (time) => {
-    const date = new Date(time);
-    
-    const hour = date.getHours() < 10 ? "0" +  date.getHours() : date.getHours();
-    const min  = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-
-    return hour + ":" + min;
-  }
 
   const submissionStatus = (submission) => {
     if (submission.status == "waiting")
@@ -79,7 +60,6 @@ const SubmissionRow = ({ submission }) => {
   const fetchUser = async () => {
     try {
       const user = await userAPI.getById(submission.UserId);
-      console.log(user);
       if (problem == null || problem.length == 0)
         return;
 
@@ -91,7 +71,6 @@ const SubmissionRow = ({ submission }) => {
   
   useEffect(async() => {
     await Promise.all([fetchProblem(), fetchUser()]);
-    console.log(user);
   }, []);
 
   return (
@@ -110,12 +89,12 @@ const SubmissionRow = ({ submission }) => {
       } 
       </StyledTableCell>
       <StyledTableCell>
-        {submissionDate(submission.CreatedAt)} 
+        {util.formattedDate(submission.CreatedAt)} 
         {"    "}
-        {submissionTime(submission.CreatedAt)}
+        {util.formattedTime(submission.CreatedAt)}
       </StyledTableCell>
       <StyledTableCell>
-        {problem && problem.Name && 
+        {problem && 
         <Link to={`/problems/${problem.Name}`} style={{color: "black", textDecoration: "underline"}}>
           {problem.Name}
         </Link>
@@ -150,7 +129,7 @@ export default function SubmissionTable({ submissions }) {
           </TableHead>
           <TableBody>
             {submissions.map((row) => (
-              <SubmissionRow key={row.id} submission={row}/>
+              <SubmissionRow key={row.ID} submission={row}/>
             ))}
           </TableBody>
         </Table>

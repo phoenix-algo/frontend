@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
+import userAPI from 'api/user';
 
 const useStyles = makeStyles({
   gravatar: {
@@ -18,6 +19,24 @@ const useStyles = makeStyles({
 
 export default function ProblemTable({ data }) {
   const classes = useStyles();
+  const [author, setAuthor] = useState(undefined);
+
+  const fetchUser = async() => {
+    try {
+      const user = await userAPI.getById(data.AuthorId);
+      
+      if (user.length === 0)
+        return;
+      
+        setAuthor(user[0]);
+    } catch(err) {
+      console.log(err)
+    }
+  };
+
+  useEffect(async() => {
+    await fetchUser();
+  }, []);
 
   return (
     <TableContainer component={Paper} style={{marginBottom: "20px"}}>
@@ -34,12 +53,13 @@ export default function ProblemTable({ data }) {
         </TableHead>
         <TableBody>
         <TableRow key={data.ID}>
-          {/* TODO avatar & username */}
             <TableCell component="th" scope="row">
-              <Link to={() => `/profile/${data.AuthorId}`} style={{color: "blue"}}>
-              <img src={"https://avatars.githubusercontent.com/u/43640455?s=96&v=4"} style={{width: "25px", borderRadius: "5px"}} alt="user icon"/> {"   "}
-              marius004
-              </Link>
+              {author != undefined && 
+                <Link to={() => `/profile/${author.Username}`} style={{color: "blue"}}>
+                    <img src={author.UserIconURL} style={{width: "25px", borderRadius: "5px"}} alt="user icon"/> {"   "}
+                    {author.Username}
+                </Link>
+              }
             </TableCell>
             <TableCell align="right">{data.ID}</TableCell>
             <TableCell align="right">{data.TimeLimit} s</TableCell>

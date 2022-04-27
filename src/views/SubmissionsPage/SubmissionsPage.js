@@ -72,8 +72,6 @@ export default function SubmissionsPage() {
     const fetchSubmissions = async(query) => {
         try {
             const submissions = await submissionAPI.getByQuery(query, page);
-            console.log(submissions);
-
             if (submissions !== null) {
                 setSubmissions(submissions);
             } else {

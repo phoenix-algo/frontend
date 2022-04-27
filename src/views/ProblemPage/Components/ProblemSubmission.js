@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 
 import authenticationUtil from "util/authentication";
 import submissionAPI from "api/submission";
+import util from "../../../util/util";
 
 const useStyles = makeStyles({
     table: {
@@ -124,7 +125,11 @@ const ProblemSubmissions = ({ problem }) => {
                                     {row.ID}
                                 </Link> 
                             </TableCell>
-                            <TableCell>{row.CreatedAt}</TableCell>
+                            <TableCell>
+                                {util.formattedDate(row.CreatedAt)}
+                                {"  "}
+                                {util.formattedTime(row.CreatedAt)}
+                            </TableCell>
                             <TableCell>{submissionStatus(row)}</TableCell>
                             <TableCell align="right">{submissionScore(row)}</TableCell>
                         </TableRow>

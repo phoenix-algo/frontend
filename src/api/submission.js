@@ -31,11 +31,6 @@ function getByUserAndProblem(user, problem) {
 }
 
 function create(sourceCode, language, problemId) {
-    console.log({
-        language: language,
-        problemId: problemId,
-        sourceCode: sourceCode,   
-    })
     return axios.post(`${config.apiUrl}/submissions`, {
         language: language,
         problemId: problemId,

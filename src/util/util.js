@@ -1,6 +1,8 @@
 const util = {
     stringToByteArray,
     decodeBase64String,
+    formattedDate,
+    formattedTime,
 }
 
 function stringToByteArray(str) {
@@ -15,6 +17,25 @@ function decodeBase64String(text) {
         return "";
 
     return atob(text)
+}
+
+function formattedDate(time) {
+    const dateObj = new Date(time);
+    
+    const month = dateObj.getUTCMonth() + 1 < 10 ? "0" + (dateObj.getUTCMonth() + 1) : dateObj.getUTCMonth() + 1;
+    const day = dateObj.getUTCDate() < 10 ? "0" + dateObj.getUTCDate() : dateObj.getUTCDate();
+    const year = dateObj.getUTCFullYear() < 10 ? "0" + dateObj.getUTCFullYear() : dateObj.getUTCFullYear();
+
+    return day + "/" + month + "/" + year;
+}
+
+function formattedTime(time) {
+    const date = new Date(time);
+    
+    const hour = date.getHours() < 10 ? "0" +  date.getHours() : date.getHours();
+    const min  = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+
+    return hour + ":" + min;
 }
 
 export default util;

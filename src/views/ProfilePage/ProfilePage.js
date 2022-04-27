@@ -84,20 +84,6 @@ export default function ProfilePage() {
         return <InternalServerError/>
     }
 
-    /*
-    <GridItem xs={4} sm={4} md={12}>
-        <div className={classes.profile}>
-        <div>
-            <img src={getGravatarURI()} alt="..." className={imageClasses} />
-        </div>
-        <div className={classes.name}>
-            <h3 className={classes.title}>{user.Username}</h3>
-            <h5 style={{textTransform: "lowercase"}}>{user.Email}</h5>
-        </div>
-        </div>
-    </GridItem>
-    */
-
     return (
         <div>
         <Navbar color="transparent" fixed ={false}/> 
@@ -117,9 +103,8 @@ export default function ProfilePage() {
                     </GridItem>
                 </GridContainer>
 
-                <GridContainer style={{padding: "0 12px", position: "relative", top: "-50px"}}>
-                    <GridItem xs={4} sm={4} md={4} style={{border: "1px solid black"}}>
-                        
+                <GridContainer style={{padding: "12px 16px", position: "relative", top: "-60px"}}>
+                    <GridItem xs={4} sm={4} md={4}>
                         <p style={{fontWeight: "bold", margin: 0, padding: 0}}>
                             {user.Bio}
                         </p> <br/>
@@ -155,19 +140,13 @@ export default function ProfilePage() {
                                 </span> <br/>
                             </>
                         }
-
-
-
-
-
-
-
-
                     </GridItem>
+
+                    <GridItem xs={8} sm={8} md={8}>
+                        
+                    </GridItem>
+
                 </GridContainer>
-            
-
-
             </div>
             </div>
         </div>

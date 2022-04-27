@@ -18,6 +18,7 @@ import Footer from "components/Footer/Footer";
 import { ToastContainer, toast } from 'react-toastify';
 
 import submissionAPI from "api/submission";
+import util from "../../util/util";
 import authenticationUtil from "util/authentication";
 
 import Loading from "views/Components/Loading";
@@ -119,16 +120,9 @@ const ProblemPage = () => {
         }
     }, [submissionId]);
 
-    const stringToByteArray = (str) => {
-        var bytes = new Uint8Array(str.length);
-        for (var i = 0; i < str.length; i++)
-            bytes[i] = str.charCodeAt(i);
-        return Array.from(bytes);
-    }
-
     const handleCodeSubmission = async() => {
         try {
-            const res = await submissionAPI.create(stringToByteArray(code), lang, problem.ID);
+            const res = await submissionAPI.create(util.stringToByteArray(code), lang, problem.ID);
             setSubmissionId(res.ID);
             
             toast.info("Submission Sent", {
