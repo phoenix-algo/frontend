@@ -11,6 +11,7 @@ const problemAPI = {
     getByAuthorId, 
     publishProblem,
     unpublishProblem,
+    getPublished,
 };
 
 function getByName(problemName) {
@@ -56,6 +57,11 @@ function publishProblem(problemName) {
 function unpublishProblem(problemName) {
     return axios.post(`${config.apiUrl}/problems/${problemName}/unpublish`, {}, 
         config.cors).then(res => res.data);
+}
+
+function getPublished() {
+    return axios.get(`${config.apiUrl}/problems?status=published`, config.cors)
+    .then(res => res.data);
 }
 
 export default problemAPI;

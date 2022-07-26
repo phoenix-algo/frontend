@@ -123,7 +123,7 @@ export default function ProposedProblemsTable() {
 
     try {
       const problems = await problemAPI.getByAuthorId(userId);
-      setRows(problems);
+      setRows(problems ? problems : []);
     }catch(err) {
       // todo handle this case later!!!
     }
@@ -143,55 +143,57 @@ export default function ProposedProblemsTable() {
           draggable={false}
           pauseOnHover={false}
       />
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="right">Time Limit</TableCell>
-              <TableCell align="right">Memory Limit</TableCell>
-              <TableCell align="right">Stack Limit</TableCell>
-              <TableCell align="right">Published</TableCell>
-              <TableCell align="center">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.length === 0 &&
-              <h1>You have not proposed any problems yet!</h1>
-            }
-            {rows.map((row) => (
-              <TableRow key={row.ID}>
-                <TableCell component="th" scope="row">
-                  <Link to={generateProblemURL(row)} className={classes.navLink} style={{color: "blue"}}>
-                    {row.Name}
-                  </Link>
-                </TableCell>
-                <TableCell align="right">
-                  {row.TimeLimit} {"s"} 
-                </TableCell>
-                <TableCell align="right">
-                  {row.MemoryLimit} {"KB"}
-                </TableCell>
-                <TableCell align="right">
-                  {row.StackLimit} {"KB"}
-                </TableCell>
-                <TableCell align="right">
-                  {row.Status}
-                </TableCell>
-                <TableCell align="right">
-                    {isProblemUnpublished(row.Status) && 
-                      <Button onClick={() => publishProblem(row)}  variant="contained" color="primary">publish</Button>
-                    } {" "}
-                    {isProblemPublished(row.Status) && 
-                      <Button onClick={() => unpublishProblem(row)} variant="contained" color="primary">unpublish</Button>
-                    } {" "}
-                    <Button onClick={() => deleteProblem(row)} variant="contained" color="secondary">delete</Button>
-                </TableCell>
+      {rows.length === 0 &&
+        <h3 style={{textAlign: "center", backgroundColor: "yellow"}}>You have not proposed any problems yet!</h3>
+      }
+      { rows.length > 0 && 
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell align="right">Time Limit</TableCell>
+                <TableCell align="right">Memory Limit</TableCell>
+                <TableCell align="right">Stack Limit</TableCell>
+                <TableCell align="right">Status</TableCell>
+                <TableCell align="center">Actions</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.ID}>
+                  <TableCell component="th" scope="row">
+                    <Link to={generateProblemURL(row)} className={classes.navLink} style={{color: "blue"}}>
+                      {row.Name}
+                    </Link>
+                  </TableCell>
+                  <TableCell align="right">
+                    {row.TimeLimit} {"s"} 
+                  </TableCell>
+                  <TableCell align="right">
+                    {row.MemoryLimit} {"KB"}
+                  </TableCell>
+                  <TableCell align="right">
+                    {row.StackLimit} {"KB"}
+                  </TableCell>
+                  <TableCell align="right">
+                    {row.Status}
+                  </TableCell>
+                  <TableCell align="right">
+                      {isProblemUnpublished(row.Status) && 
+                        <Button onClick={() => publishProblem(row)}  variant="contained" color="primary">publish</Button>
+                      } {" "}
+                      {(isProblemPublished(row.Status) || isProblemWaitingForApproval(row.Status)) && 
+                        <Button onClick={() => unpublishProblem(row)} variant="contained" color="primary">unpublish</Button>
+                      } {" "}
+                      <Button onClick={() => deleteProblem(row)} variant="contained" color="secondary">delete</Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      }
     </>
   );
 }

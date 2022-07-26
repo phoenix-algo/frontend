@@ -21,7 +21,7 @@ const ProblemsPage = () => {
 
     const fetchProblems = async () => {
         try {
-            const problems = await problemAPI.getAll();
+            const problems = await problemAPI.getPublished();
             setProblems(problems);
         }catch(err) {
             if (err.message == "Network Error") {
