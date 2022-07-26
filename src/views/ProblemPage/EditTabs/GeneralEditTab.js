@@ -92,11 +92,11 @@ export default function GeneralEditTab({problem, setProblem}) {
         if (confirm("Are you sure you want to delete this problem?")) {
             try {
                 await problemAPI.delete(problem.Name);
-                toast.success(`Problem ${problem.Name} deleted! Redirecting you to the problems page!`, toastConfig);
+                toast.success(`Problem ${problem.Name} deleted!`, toastConfig);
                 
                 setTimeout(() => {
                     history.push("/problems");
-                }, 2000);
+                }, 1000);
             } catch(err) {
                 console.error(err);
                 const message = err?.response?.data;

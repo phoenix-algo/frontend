@@ -97,29 +97,6 @@ export default function HeaderLinks(props) {
           Submissions
         </Link>
       </ListItem>
-      <ListItem className={classes.listItem}>
-        <CustomDropdown
-          noLiPadding
-          buttonText="Resourses"
-          buttonProps={{
-            className: classes.navLink,
-            color: "transparent",
-          }}
-          buttonIcon={MenuBookIcon}
-          dropdownList={[
-            // TODO
-            <Link to="/" className={classes.dropdownLink}>
-              Design Patterns
-            </Link>,
-            <Link to="/" className={classes.dropdownLink}>
-              Competitive Programming
-            </Link>,
-            <Link to="/" className={classes.dropdownLink}>
-              Concurrency
-            </Link>,
-          ]}
-        />
-      </ListItem>
       {
         !authenticationUtil.isUserLoggedIn() &&
         <>

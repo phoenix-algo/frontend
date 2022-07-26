@@ -8,6 +8,9 @@ const problemAPI = {
     create,
     update,
     delete: deleteProblem,
+    getByAuthorId, 
+    publishProblem,
+    unpublishProblem,
 };
 
 function getByName(problemName) {
@@ -17,6 +20,11 @@ function getByName(problemName) {
 
 function getById(problemId) {
     return axios.get(`${config.apiUrl}/problems?problemId=${problemId}`, config.cors)
+        .then(res => res.data)
+}
+
+function getByAuthorId(authorId) {
+    return axios.get(`${config.apiUrl}/problems?authorId=${authorId}`, config.cors)
         .then(res => res.data)
 }
 
@@ -37,6 +45,16 @@ function update(problemName, data) {
 
 function deleteProblem(problemName) {
     return axios.delete(`${config.apiUrl}/problems/${problemName}`, 
+        config.cors).then(res => res.data);
+}
+
+function publishProblem(problemName) {
+    return axios.post(`${config.apiUrl}/problems/${problemName}/publish`, {}, 
+        config.cors).then(res => res.data);
+}
+
+function unpublishProblem(problemName) {
+    return axios.post(`${config.apiUrl}/problems/${problemName}/unpublish`, {}, 
         config.cors).then(res => res.data);
 }
 

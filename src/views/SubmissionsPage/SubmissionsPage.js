@@ -125,9 +125,6 @@ export default function SubmissionsPage() {
         <div>
             <Navbar color="white" fixed ={false}/> 
             <div style={{marginTop: "100px"}} className={classNames(classes.main, classes.mainRaised)}>
-                <div style={{padding: "12px"}}>
-                    <Alert severity="error">If your URL contains query search parameters, please click the search button to filter the submissions!! (bug fix coming soon)</Alert>
-                </div>
                 <Grid container spacing={3} style={{padding: "12px"}}>
                     <Grid item xl={4} md={3} xs={5}>
                        <SubmissionFilter

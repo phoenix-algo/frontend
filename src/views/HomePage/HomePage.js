@@ -25,10 +25,10 @@ export default function Components() {
               <div className={classes.brand}>
                 <h1 className={classes.title}>Phoenix</h1>
                 <h3 
-                  style={{ fontWeight: 500 }} 
+                  style={{ fontWeight: 400 }} 
                   className={classes.subtitle}
                   >
-                  A modern platform for learning computer science
+                  A modern platform for practising algorithms.
                 </h3>
               </div>
             </GridItem>
@@ -39,7 +39,7 @@ export default function Components() {
       <div className={classNames(classes.main, classes.mainRaised)}>
         <SectionFeatures/>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 }

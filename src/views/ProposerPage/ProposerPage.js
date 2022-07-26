@@ -2,10 +2,12 @@ import React, {useState} from 'react';
 import { Container, CssBaseline } from '@material-ui/core';
 import Navbar from 'components/Navbar/Navbar';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import problemAPI from 'api/problem';
 import { ToastContainer, toast } from 'react-toastify';
+import ProposedProblemsTable from './Components/ProposedProblemsTable';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,6 +32,11 @@ const toastConfig = {
 export default function ProposerPage() {
    const classes = useStyles();
    const [name, setName] = useState("");
+   const history = useHistory();
+
+   const redirectToProblemEdit = () => {
+        history.push(`/problems/${name}/edit`);
+   }    
 
    const handleSubmit = async(e) => {
         e.preventDefault();
@@ -45,6 +52,7 @@ export default function ProposerPage() {
         try {
             await problemAPI.create(problem);
             toast.success("Problem created successfully!", toastConfig);
+            setTimeout(redirectToProblemEdit, 1000);
         } catch(err) {
             console.error(err);
             const message = err.response.data; 
@@ -85,6 +93,10 @@ export default function ProposerPage() {
                     Create 
                 </Button>
             </form>
+
+            <h2 style={{textAlign: "center"}}>Proposed Problems</h2>
+            <ProposedProblemsTable/>
+
         </Container>
        </div>
    );
