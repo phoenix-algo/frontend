@@ -6,6 +6,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import problemAPI from 'api/problem';
 import { ToastContainer, toast } from 'react-toastify';
+import WaitingForApprovalProblemsTable from './Components/WaitingForApprovalProblemsTable';
+import UsersTable from './Components/UsersTable';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,8 +47,11 @@ export default function AdminPage() {
         <CssBaseline/>
         <Navbar color="white" fixed ={false} />
         <Container style={{marginTop: "100px"}}>
-            <h2 style={{textAlign: "center"}}>Admin Panel</h2>
-            
+            <h2 style={{textAlign: "center"}}>Manage Problems</h2>
+            <WaitingForApprovalProblemsTable/>
+
+            <h2 style={{textAlign: "center"}}>Manage Users</h2>
+            <UsersTable/>
         </Container>
        </div>
    );

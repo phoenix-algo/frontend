@@ -4,6 +4,8 @@ import config from "../config";
 const userAPI = {
     getByUsername,
     getById,
+    getAll, 
+    assignProposerRole, 
 }
 
 function getById(userId) {
@@ -13,6 +15,16 @@ function getById(userId) {
 
 function getByUsername(username) {
     return axios.get(`${config.apiUrl}/users/${username}`, config.cors)
+        .then(res => res.data);
+}
+
+function getAll() {
+    return axios.get(`${config.apiUrl}/users`, config.cors)
+        .then(res => res.data);
+}
+
+function assignProposerRole(username, value) {
+    return axios.post(`${config.apiUrl}/users/${username}/roles/proposer/${value}`, {}, config.cors)
         .then(res => res.data);
 }
 
