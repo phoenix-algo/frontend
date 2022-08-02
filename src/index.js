@@ -12,11 +12,13 @@ import SubmissionsPage from "views/SubmissionsPage/SubmissionsPage";
 import SubmissionPage from "views/SubmissionPage/SubmissionPage";
 import ProblemsPage from "views/ProblemsPage/ProblemsPage";
 import RequireProposer from "components/Authorization/RequireProposer";
+import RequireAuth from "components/Authorization/RequireAuth";
 import Unauthorized from "views/Components/Unauthorized";
 import ProposerPage from "views/ProposerPage/ProposerPage";
 import AdminPage from "views/AdminPage/AdminPage";
 import RequireAdmin from "components/Authorization/RequireAdmin";
 import EditProblemPage from "views/ProblemPage/EditProblemPage";
+import EditProfilePage from "views/ProfilePage/Components/EditProfilePage";
 
 const hist = createBrowserHistory();
 
@@ -27,7 +29,8 @@ ReactDOM.render(
       <Route exact path="/problems/:problemName" component={ProblemPage} />
       <Route exact path="/problems/:problemName/edit" component={RequireProposer(Unauthorized, EditProblemPage)} />
       <Route exact path="/problems" component={ProblemsPage}/>
-      <Route path="/profile/:username" component={ProfilePage} />
+      <Route exact path="/profile-edit" component={RequireAuth(Unauthorized, EditProfilePage)} />
+      <Route exact path="/profile/:username" component={ProfilePage} />
       <Route path="/submissions/:submissionId" component={SubmissionPage} />
       <Route path="/submissions" component={SubmissionsPage} />
       <Route path="/proposer" component={RequireProposer(Unauthorized, ProposerPage)} />

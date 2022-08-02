@@ -5,7 +5,9 @@ const userAPI = {
     getByUsername,
     getById,
     getAll, 
+    getStats,
     assignProposerRole, 
+    update,
 }
 
 function getById(userId) {
@@ -20,6 +22,16 @@ function getByUsername(username) {
 
 function getAll() {
     return axios.get(`${config.apiUrl}/users`, config.cors)
+        .then(res => res.data);
+}
+
+function getStats(username) {
+    return axios.get(`${config.apiUrl}/users/${username}/stats`, config.cors)
+        .then(res => res.data);
+}
+
+function update(data) {
+    return axios.put(`${config.apiUrl}/users`, data, config.cors)
         .then(res => res.data);
 }
 
