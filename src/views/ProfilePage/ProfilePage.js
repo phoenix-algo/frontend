@@ -29,6 +29,7 @@ export default function ProfilePage() {
     const {username} = useParams();
     const history = useHistory();
 
+    const [authedUser, setAuthedUser] = useState(null);
     const [user, setUser] = useState({})
     const [stats, setStats] = useState(null);
 
@@ -93,7 +94,7 @@ export default function ProfilePage() {
         }
     }
 
-    const showEditProfileButton = () => username === user?.Username
+    const showEditProfileButton = () => username === authedUser?.Username
     const redirectToProfileEditPage = () => history.push("/profile-edit")
 
     const getGravatarURI = () => {
@@ -102,6 +103,10 @@ export default function ProfilePage() {
 
     useEffect(fetchUser, []);
     useEffect(fetchStats, []);
+    useEffect(() => {
+        const authedUsr = userUtil.getUserData();
+        setAuthedUser(authedUsr);
+    }, []);
 
     if (loading) {
         return <Loading/>
@@ -137,6 +142,7 @@ export default function ProfilePage() {
                 </GridContainer>
 
                 <GridContainer style={{padding: "12px 16px", position: "relative", top: "-60px"}}>
+                    {showEditProfileButton() && 
                     <Button 
                         type="submit"
                         variant="contained" 
@@ -146,6 +152,7 @@ export default function ProfilePage() {
                     >
                         Edit
                     </Button>
+                    }
                     <GridItem xs={8} sm={8} md={8}>
                         <p style={{fontWeight: "bold", margin: 0, padding: 0}}>
                             {user.Bio}

@@ -88,7 +88,6 @@ export default function SubmissionsPage() {
         e.preventDefault();
 
         const query = buildSubmissionQuery();
-        console.log(`/submissions?${query}`)
         history.push(`/submissions?${query}`);
 
         try {

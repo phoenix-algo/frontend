@@ -36,9 +36,9 @@ const SubmissionRow = ({ submission }) => {
   const [user, setUser] = useState(undefined);
 
   const submissionStatus = (submission) => {
-    if (submission.status == "waiting")
+    if (submission.Status == "waiting")
         return "Waiting";
-    if(submission.status == "evaluating")
+    if(submission.Status == "evaluating")
         return "Evaluating";
     if (submission.CompiledSuccesfully === false)
         return "Compilation Error";
@@ -47,7 +47,7 @@ const SubmissionRow = ({ submission }) => {
 
   const fetchProblem = async () => {
     try {
-      const problem = await problemAPI.getById(submission.problemId);
+      const problem = await problemAPI.getById(submission.ProblemId);
       if (problem == null || problem.length == 0)
         return;
       
